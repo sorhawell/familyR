@@ -4,7 +4,7 @@
 \alias{dfirst_test}
 \title{simple test}
 \usage{
-dfirst_test(source_node, from, to, verbose, only_nodes, paths_stream)
+dfirst_test(source_node, from, to, max_level, verbose, only_nodes, paths_stream)
 }
 \arguments{
 \item{paths_stream}{}

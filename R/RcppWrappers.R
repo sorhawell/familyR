@@ -49,3 +49,4 @@ bfirst_test = function(source_node_no,from,to,n_epochs,paths_stream,seen_nodes_s
 dfirst_test = function(source_node,from,to,max_level,verbose,only_nodes,paths_stream){
   familyR:::rcpp_dfirst(source_node,from,to,max_level,verbose,only_nodes,paths_stream)
 }
+

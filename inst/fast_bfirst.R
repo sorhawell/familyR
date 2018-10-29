@@ -1,8 +1,14 @@
 library(familyR)
 rm(list=ls())
+# set.seed(1)
+# nodes = make_nodes(list("a",0:9,0:9,0:9,0:9))
+# edges = sample_edges(nodes,n=10000,cluster_size = 6000)
+# source_node = 1
+# dt = edges
+
 set.seed(1)
-nodes = make_nodes(list("a",0:9,0:9,0:9,0:9))
-edges = sample_edges(nodes,n=10000,cluster_size = 6000)
+nodes = make_nodes(list("a",0:9))
+edges = sample_edges(nodes,n=20)
 source_node = 1
 dt = edges
 

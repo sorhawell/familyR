@@ -6,18 +6,19 @@
 using namespace Rcpp;
 
 // rcpp_dfirst
-int rcpp_dfirst(int source_node, IntegerVector from, IntegerVector to, bool verbose, bool only_nodes, IntegerVector path_stream);
-RcppExport SEXP _familyR_rcpp_dfirst(SEXP source_nodeSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP verboseSEXP, SEXP only_nodesSEXP, SEXP path_streamSEXP) {
+int rcpp_dfirst(int source_node, IntegerVector from, IntegerVector to, int max_level, bool verbose, bool only_nodes, IntegerVector paths_stream);
+RcppExport SEXP _familyR_rcpp_dfirst(SEXP source_nodeSEXP, SEXP fromSEXP, SEXP toSEXP, SEXP max_levelSEXP, SEXP verboseSEXP, SEXP only_nodesSEXP, SEXP paths_streamSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type source_node(source_nodeSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type from(fromSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type to(toSEXP);
+    Rcpp::traits::input_parameter< int >::type max_level(max_levelSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< bool >::type only_nodes(only_nodesSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type path_stream(path_streamSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_dfirst(source_node, from, to, verbose, only_nodes, path_stream));
+    Rcpp::traits::input_parameter< IntegerVector >::type paths_stream(paths_streamSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_dfirst(source_node, from, to, max_level, verbose, only_nodes, paths_stream));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -55,7 +56,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_familyR_rcpp_dfirst", (DL_FUNC) &_familyR_rcpp_dfirst, 6},
+    {"_familyR_rcpp_dfirst", (DL_FUNC) &_familyR_rcpp_dfirst, 7},
     {"_familyR_rcpp_bfirst", (DL_FUNC) &_familyR_rcpp_bfirst, 6},
     {"_familyR_rcpp_bfirst2", (DL_FUNC) &_familyR_rcpp_bfirst2, 6},
     {NULL, NULL, 0}

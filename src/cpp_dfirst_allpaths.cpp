@@ -12,7 +12,7 @@ using namespace Rcpp;
 //
 
 
-void follow_tree(
+int follow_tree(
   int this_node,
   IntegerVector from,
   IntegerVector to,
@@ -22,25 +22,37 @@ void follow_tree(
   bool verbose,
   bool only_nodes,
   IntegerVector paths_stream,
-  IntegerVector paths_stream_pp) {
+  int paths_stream_pp) {
 
   //force return if this_level>max_depth
-  if(this_level>max_depth) return;
+  if(this_level>max_depth) {
+    Rprintf("max level reached, returning \n ");
+    return(-paths_stream_pp);
+  }
+
+  //force return if memory exceeds
+  if(paths_stream_pp-2>paths_stream.size()) {
+    Rprintf("memory exceeded, returning \n");
+    return(-paths_stream_pp);
+  }
 
   //some local variables
   int a_child_node;
   int any_match;
   int n_children_found = 0;
   int a_node_in_a_path;
+  int circle_counter;
   //int circle_counter;
 
   //some constants
-  int from_size      = from.size();
-
+  int from_size = from.size();
 
   //extend this_path with this_node
   this_path[this_level-1] = this_node;
+  if(verbose) for(int i =0; i<this_level;i++) Rprintf("%i-",this_path[i]);
 
+  paths_stream[paths_stream_pp++] = -this_level;
+  paths_stream[paths_stream_pp++] = this_node;
 
   //iterate all edges...
   for(int i_node = 0; i_node<from_size;i_node++) {
@@ -51,7 +63,7 @@ void follow_tree(
 
       //check child is not already in path, to avoid creating a circle
       circle_counter = 0;
-      for(int i_path = 0; i_path<this_level;i_path++) {
+      for(int i_path = 0; i_path<(this_level);i_path++) {
         a_node_in_a_path = this_path[i_path];
         if(a_node_in_a_path == 0) break; //this_path is not longer, everything beyond here is zeros anyway
         if(a_child_node==this_path[i_path]) circle_counter++; //already in this path, that would make a circle
@@ -61,26 +73,18 @@ void follow_tree(
       if(circle_counter == 0) {
         n_children_found++;//count found children for this node
         //goto child
-        follow_tree(a_child_node,from,to,this_level+1,this_path,max_depth,
-                    verbose,only_nodes,paths_stream,paths_stream_pp);
+        if(verbose) Rprintf("\n g%i, L%i \n",a_child_node,this_level);
+        paths_stream_pp = follow_tree(
+          a_child_node,from,to,this_level+1,this_path,max_depth,
+          verbose,only_nodes,paths_stream,paths_stream_pp);
+        if(paths_stream_pp<0)      return(paths_stream_pp);
         //... and now returning from child
         //... go look for more children
       }
     }
-    //if no valid children was found, then this node is a terminal.
-    if(n_children_found==0) {
-      //push this_path to paths_stream
-      for(int i_path = 0; i_path<this_level;i_path++) {
-        paths_stream_pp[0] = paths_stream_pp[0] + 1;
-        paths_stream[i_path+paths_stream_pp] = this_path[i_path];
-      }
-
-    }
-
-
-
   }
-
+  //if no valid children was found, then this node is a terminal.
+  return(paths_stream_pp);
 }
 
 // [[Rcpp::export]]
@@ -97,14 +101,12 @@ int rcpp_dfirst(
   //int paths_stream_p = &paths_stream;
   if(only_nodes) IntegerVector global_seen_nodes(from.size());
   IntegerVector empty_path(max_level);
-  IntegerVector paths_stream_pp(1);
+  int paths_stream_pp;
 
   //follow_tree( this_node,from,to,this_level  this_path,max_depth, verbose,only_nodes,path_stream
-  follow_tree(source_node ,from,to,1        ,  empty_path,25      , verbose,
+  paths_stream_pp = follow_tree(source_node ,from,to,1,empty_path,max_level, verbose,
               only_nodes,paths_stream,paths_stream_pp);
 
-  int b = 0;
-
-  return b;
+  return paths_stream_pp;
 }
 
