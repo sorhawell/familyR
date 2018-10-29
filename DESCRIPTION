@@ -2,12 +2,14 @@ Package: familyR
 Type: Package
 Title: Fast family functions for your graph data
 Version: 1.0
-Author: Emil Lykke Jensen <emil@emillykkejensen.dk>
+Date: 2018-10-27
+Author: Emil Lykke Jensen <emil@emillykkejensen.dk>, Soren Welling <sorhawell@gmail.com>
 Maintainer: Emil Lykke Jensen <emil@emillykkejensen.dk>
 Description: familyR provides a fast way to get all parents, children and even the entire family tree of a node. It uses nothing but data.table and hence it is fast!
 License: GPL-3 | file LICENSE
+Imports: data.table, magrittr, Rcpp (>= 0.12.18)
+LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true
 Byte-Compile: yes
-Depends: data.table, magrittr
 RoxygenNote: 6.1.0
