@@ -22,6 +22,7 @@ dt = unique(edges)
 #define recursice function
 system.time({print(get_children(dt,2))})
 system.time({o2 = dfirst_fastR(2,dt,max_depth=100,verbose=FALSE,only_nodes=FALSE,allocateMemory=1E5)})
+sort(sapply(o2,min))
 sort(sapply(o2,max))
 
 
